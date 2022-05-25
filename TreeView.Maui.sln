@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32505.426
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sandbox", "sandbox", "{954FD25C-7187-4B87-B761-322E821CEFC0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{750F7F5F-FA9C-4E06-A580-09FB9EE8D3C9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SandboxTreeView", "sandbox\SandboxTreeView\SandboxTreeView.csproj", "{9AC69FB8-F67B-4EC6-9C9B-E89A477DFDA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeView.Maui", "src\TreeView.Maui\TreeView.Maui.csproj", "{99A998E6-EF31-45EF-96AB-EA0FA918A66C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9AC69FB8-F67B-4EC6-9C9B-E89A477DFDA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AC69FB8-F67B-4EC6-9C9B-E89A477DFDA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AC69FB8-F67B-4EC6-9C9B-E89A477DFDA0}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9AC69FB8-F67B-4EC6-9C9B-E89A477DFDA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AC69FB8-F67B-4EC6-9C9B-E89A477DFDA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AC69FB8-F67B-4EC6-9C9B-E89A477DFDA0}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{99A998E6-EF31-45EF-96AB-EA0FA918A66C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99A998E6-EF31-45EF-96AB-EA0FA918A66C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99A998E6-EF31-45EF-96AB-EA0FA918A66C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99A998E6-EF31-45EF-96AB-EA0FA918A66C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9AC69FB8-F67B-4EC6-9C9B-E89A477DFDA0} = {954FD25C-7187-4B87-B761-322E821CEFC0}
+		{99A998E6-EF31-45EF-96AB-EA0FA918A66C} = {750F7F5F-FA9C-4E06-A580-09FB9EE8D3C9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {031A02C8-6123-49CD-90E9-E2FAC2D70134}
+	EndGlobalSection
+EndGlobal
