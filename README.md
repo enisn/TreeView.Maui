@@ -144,12 +144,13 @@
     ```
 
 
-    ## Roadmap
+## Roadmap
 
-    - [ ] Lazy-load Performance improvements
-      - [ ] Async API for lazy loading
-      - [ ] Activity indicator on Long-running process _(http request for getting child nodes)_
-    - [ ] Selection
-      - [ ] Single Selection
-      - [ ] Multiple Selection
+- [ ] Lazy-load Performance improvements
+  - [ ] Async API for lazy loading
+  - [ ] Activity indicator on Long-running process _(http request for getting child nodes)_
+- [ ] Selection
+  - [ ] Single Selection
+  - [ ] Multiple Selection
+- [ ] Include it in [InputKit](https://github.com/enisn/Xamarin.Forms.InputKit)
 
