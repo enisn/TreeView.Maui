@@ -6,9 +6,19 @@
     xmlns:local="clr-namespace:SandboxTreeView"
     Shell.FlyoutBehavior="Disabled">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <TabBar>
+
+        <Tab Title="Simple">
+            <ShellContent
+            Title="Simple"
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage" />
+        </Tab>
+        <Tab Title="FileSystem">
+            <ShellContent Title="FileSystem"
+                      ContentTemplate="{DataTemplate local:FileSystemPage}"
+                      Route="FileSystem"/>
+        </Tab>
+    </TabBar>
 
 </Shell>
