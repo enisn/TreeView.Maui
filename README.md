@@ -60,38 +60,40 @@
         </t:TreeView>
     ```
 
+---
+
 ### Use-cases
 
 - Lazy-load
 
 ```csharp
 
-IEnumerable<TreeViewNode> GetNodes(string dir)
-{
-    var directories = Directory.GetDirectories(dir);
-    foreach (string d in directories)
+    IEnumerable<TreeViewNode> GetNodes(string dir)
     {
-        yield return new TreeViewNode
+        var directories = Directory.GetDirectories(dir);
+        foreach (string d in directories)
         {
-            Name = d.Split(Path.DirectorySeparatorChar).LastOrDefault(),
-            Value = d,
-            // 👇 You can define func instead of initializing entire tree.
-            GetChildren = (node) => GetNodes(node.Value.ToString())
-        };
-    }
-    var files = Directory.GetFiles(dir);
+            yield return new TreeViewNode
+            {
+                Name = d.Split(Path.DirectorySeparatorChar).LastOrDefault(),
+                Value = d,
+                // 👇 You can define func instead of initializing entire tree.
+                GetChildren = (node) => GetNodes(node.Value.ToString())
+            };
+        }
+        var files = Directory.GetFiles(dir);
 
-    foreach (string f in files)
-    {
-        var node = new TreeViewNode
+        foreach (string f in files)
         {
-            Name = f.Split(Path.DirectorySeparatorChar).LastOrDefault(),
-            Value = f,
-        };
-        yield return node;
+            var node = new TreeViewNode
+            {
+                Name = f.Split(Path.DirectorySeparatorChar).LastOrDefault(),
+                Value = f,
+            };
+            yield return node;
+        }
     }
-}
-```
+    ```
 
 - Using a custom item template
 
