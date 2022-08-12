@@ -10,7 +10,7 @@
 
 ## Getting Started
 
-- Install `TreeView.Maui` from NuGet. _(coming soon)_
+- Install `TreeView.Maui` from [NuGet](https://www.nuget.org/packages/TreeView.Maui).
 
 - Create your nodes with `TreeViewNode` class.
 
