@@ -2,7 +2,7 @@ namespace SandboxTreeView;
 
 public partial class FileSystemCustomTemplatePage : ContentPage
 {
-	public CustomTemplate()
+	public FileSystemCustomTemplatePage()
 	{
 		InitializeComponent();
 	}

@@ -49,6 +49,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\check.png" />
 	  <None Remove="Resources\Images\folder.svg" />
 	</ItemGroup>
 
@@ -57,7 +58,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="CustomTemplate.xaml">
+	  <Compile Update="FileSystemCustomTemplatePage.xaml.cs">
+	    <DependentUpon>FileSystemCustomTemplatePage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="FileSystemCustomTemplatePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="FileSystemPage.xaml">
