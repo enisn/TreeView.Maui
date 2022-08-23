@@ -72,6 +72,11 @@ public class TreeView : ContentView
     {
         _root.Children.Clear();
 
+        if (ItemsSource == null)
+        {
+            return;
+        }
+
         foreach (var item in ItemsSource)
         {
             if (item is IHasChildrenTreeViewNode node)
