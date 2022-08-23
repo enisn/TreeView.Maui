@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SandboxTreeView.FileSystemCustomTemplatePage"
+            xmlns:local="clr-namespace:SandboxTreeView"
+             xmlns:t="clr-namespace:TreeView.Maui.Controls;assembly=TreeView.Maui"
+             Title="CustomTemplate">
+    <ContentPage.BindingContext>
+        <local:FileSystemPageViewModel/>
+    </ContentPage.BindingContext>
+    <Grid
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand">
+        <t:TreeView ItemsSource="{Binding Nodes}">
+            <t:TreeView.ItemTemplate>
+                <DataTemplate>
+                    <HorizontalStackLayout>
+                        <Image Source="folder.png"/>
+                        <Label Text="{Binding Name}"/>
+                        <Image Source="check.png"/>
+                    </HorizontalStackLayout>
+                </DataTemplate>
+            </t:TreeView.ItemTemplate>
+        </t:TreeView>
+    </Grid>
+</ContentPage>

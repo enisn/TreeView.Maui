@@ -19,6 +19,11 @@
                       ContentTemplate="{DataTemplate local:FileSystemPage}"
                       Route="FileSystem"/>
         </Tab>
+        <Tab Title="FileSystem (Custom)">
+            <ShellContent Title="Custom Template"
+                      ContentTemplate="{DataTemplate local:FileSystemCustomTemplatePage}"
+                      Route="Custom"/>
+        </Tab>
     </TabBar>
 
 </Shell>
