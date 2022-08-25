@@ -25,12 +25,12 @@ public class TreeView : ContentView
     {
         if (oldValue is INotifyCollectionChanged oldItemsSource)
         {
-            oldItemsSource.CollectionChanged -= Observable_CollectionChanged;
+            oldItemsSource.CollectionChanged -= OnItemsSourceChanged;
         }
 
         if (newValue is INotifyCollectionChanged newItemsSource)
         {
-            newItemsSource.CollectionChanged += Observable_CollectionChanged;
+            newItemsSource.CollectionChanged += OnItemsSourceChanged;
         }
     }
 
@@ -39,26 +39,30 @@ public class TreeView : ContentView
         Render();
     }
 
-    private void Observable_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private protected virtual void OnItemsSourceChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        switch (e.Action) // TODO: Find element and update or delete
+        switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
+                {
+                    foreach (var item in e.NewItems)
+                    {
+                        _root.Children.Insert(e.NewStartingIndex, new TreeViewNodeView(item as IHasChildrenTreeViewNode, ItemTemplate));
+                    }
+                }
                 break;
             case NotifyCollectionChangedAction.Remove:
-                break;
-            case NotifyCollectionChangedAction.Replace:
-                break;
-            case NotifyCollectionChangedAction.Move:
-                break;
-            case NotifyCollectionChangedAction.Reset:
+                {
+                    foreach (var item in e.OldItems)
+                    {
+                        _root.Children.Remove(_root.Children.FirstOrDefault(x => (x as View).BindingContext == item));
+                    }
+                }
                 break;
             default:
+                Render();
                 break;
         }
-        // TODO: Some optimizations
-        // Eventually Render
-        Render();
     }
 
     protected virtual void OnItemTemplateChanged()
