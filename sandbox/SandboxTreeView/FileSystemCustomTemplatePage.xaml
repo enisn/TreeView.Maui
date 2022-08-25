@@ -11,19 +11,31 @@
     <Grid
         VerticalOptions="FillAndExpand"
         HorizontalOptions="FillAndExpand">
-        <t:TreeView ItemsSource="{Binding Nodes}">
-            <t:TreeView.ItemTemplate>
-                <DataTemplate>
-                    <HorizontalStackLayout>
-                        <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding ToggleCommand}" />
-                        </HorizontalStackLayout.GestureRecognizers>
-                        <Image Source="folder.png" IsVisible="{Binding IsDirectory}" HeightRequest="30"/>
-                        <Label Text="{Binding Name}"/>
-                        <Image Source="check.png" IsVisible="{Binding IsSelected}" HeightRequest="30"/>
-                    </HorizontalStackLayout>
-                </DataTemplate>
-            </t:TreeView.ItemTemplate>
-        </t:TreeView>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <HorizontalStackLayout Grid.Row="0" VerticalOptions="Start">
+            <Button BackgroundColor="LightGreen" Command="{Binding AddCurrentDateCommand}" Text="Add"/>
+            <Button BackgroundColor="Red" Command="{Binding RemoveFirstItemCommand}" Text="Remove"/>
+        </HorizontalStackLayout>
+        
+        <ScrollView Grid.Row="1" >
+
+            <t:TreeView ItemsSource="{Binding Nodes}">
+                <t:TreeView.ItemTemplate>
+                    <DataTemplate>
+                        <HorizontalStackLayout>
+                            <HorizontalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ToggleCommand}" />
+                            </HorizontalStackLayout.GestureRecognizers>
+                            <Image Source="folder.png" IsVisible="{Binding IsDirectory}" HeightRequest="30"/>
+                            <Label Text="{Binding Name}"/>
+                            <Image Source="check.png" IsVisible="{Binding IsSelected}" HeightRequest="30"/>
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </t:TreeView.ItemTemplate>
+            </t:TreeView>
+        </ScrollView>
     </Grid>
 </ContentPage>

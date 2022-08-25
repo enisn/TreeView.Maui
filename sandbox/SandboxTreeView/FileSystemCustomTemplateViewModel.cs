@@ -1,26 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TreeView.Maui.Core;
 
 namespace SandboxTreeView;
 public class FileSystemCustomTemplatePageViewModel : BindableObject
 {
-    private bool isBusy; 
+    private bool isBusy;
     public bool IsBusy { get => isBusy; set { isBusy = value; OnPropertyChanged(); } }
 
     private ObservableCollection<MyTreeViewNode> nodes;
 
     public ObservableCollection<MyTreeViewNode> Nodes { get => nodes; set { nodes = value; OnPropertyChanged(); } }
 
-	public FileSystemCustomTemplatePageViewModel()
+    public ICommand RemoveFirstItemCommand { get; }
+
+    public ICommand AddCurrentDateCommand { get; }
+
+    public FileSystemCustomTemplatePageViewModel()
     {
         InitializeNodes();
-
+        RemoveFirstItemCommand = new Command(() => Nodes.RemoveAt(0));
+        AddCurrentDateCommand = new Command(() => Nodes.Insert(0, new MyTreeViewNode
+        {
+            Name = DateTime.Now.ToLongDateString(),
+            IsDirectory = false,
+            IsLeaf = true
+        }));
     }
 
     async void InitializeNodes()
@@ -68,12 +73,12 @@ public class FileSystemCustomTemplatePageViewModel : BindableObject
     }
 
     public class MyTreeViewNode : TreeViewNode
-	{
-		public bool IsDirectory { get; set; }
+    {
+        public bool IsDirectory { get; set; }
 
-		private bool isSelected;
+        private bool isSelected;
 
-		public bool IsSelected { get => isSelected; set { isSelected = value; OnPropertyChanged(); } }
+        public bool IsSelected { get => isSelected; set { isSelected = value; OnPropertyChanged(); } }
 
         public ICommand ToggleCommand { get; protected set; }
 
