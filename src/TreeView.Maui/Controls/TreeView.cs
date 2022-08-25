@@ -96,7 +96,7 @@ public class TreeViewNodeView : ContentView
     public TreeViewNodeView(IHasChildrenTreeViewNode node, DataTemplate itemTemplate)
     {
         var sl = new StackLayout {  Spacing = 0 };
-
+        BindingContext = node;
         Content = sl;
 
         var slChildrens = new StackLayout { IsVisible = node.IsExtended, Margin = new Thickness(10, 0, 0, 0), Spacing = 0 };
@@ -142,7 +142,6 @@ public class TreeViewNodeView : ContentView
         };
 
         var content = itemTemplate.CreateContent() as View;
-        content.BindingContext = node;
 
         sl.Children.Add(new StackLayout
         {
