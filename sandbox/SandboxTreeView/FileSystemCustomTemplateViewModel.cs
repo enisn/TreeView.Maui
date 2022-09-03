@@ -20,7 +20,14 @@ public class FileSystemCustomTemplatePageViewModel : BindableObject
     {
         InitializeNodes();
         RemoveFirstItemCommand = new Command(() => Nodes.RemoveAt(0));
-        AddCurrentDateCommand = new Command(() => Nodes.Insert(0, new MyTreeViewNode
+        //AddCurrentDateCommand = new Command(() => Nodes.Insert(0, new MyTreeViewNode
+        //{
+        //    Name = DateTime.Now.ToLongDateString(),
+        //    IsDirectory = false,
+        //    IsLeaf = true
+        //}));
+
+        AddCurrentDateCommand = new Command(() => Nodes.First().Children.Insert(0, new MyTreeViewNode
         {
             Name = DateTime.Now.ToLongDateString(),
             IsDirectory = false,
@@ -54,7 +61,7 @@ public class FileSystemCustomTemplatePageViewModel : BindableObject
                 Name = d.Split(Path.DirectorySeparatorChar).LastOrDefault(),
                 Value = d,
                 IsDirectory = true,
-                GetChildren = (node) => GetContent(node.Value.ToString())
+                GetChildren = (node) => new ObservableCollection<MyTreeViewNode>(GetContent(node.Value.ToString()))
                 //Children = DirSearch(d).ToList()
             };
         }
