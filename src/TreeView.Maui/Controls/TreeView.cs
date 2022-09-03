@@ -131,10 +131,10 @@ public class TreeViewNodeView : ContentView
 
                 if (node is ILazyLoadTreeViewNode lazyNode && lazyNode.GetChildren != null && !lazyNode.Children.Any())
                 {
-                    foreach (var child in lazyNode.GetChildren(lazyNode))
+                    var lazyChildren = lazyNode.GetChildren(lazyNode);
+                    foreach (var child in lazyChildren)
                     {
                         lazyNode.Children.Add(child);
-                        slChildrens.Add(new TreeViewNodeView(child, ItemTemplate, theme));
                     }
 
                     if (!lazyNode.Children.Any())
@@ -162,17 +162,17 @@ public class TreeViewNodeView : ContentView
             }
         });
 
-        if (Node.Children is INotifyCollectionChanged ovservableCollection)
-        {
-            ovservableCollection.CollectionChanged += Children_CollectionChanged;
-        }
-
         foreach (var child in node.Children)
         {
             slChildrens.Children.Add(new TreeViewNodeView(child, ItemTemplate, theme));
         }
 
         sl.Children.Add(slChildrens);
+
+        if (Node.Children is INotifyCollectionChanged ovservableCollection)
+        {
+            ovservableCollection.CollectionChanged += Children_CollectionChanged;
+        }
     }
 
     private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
