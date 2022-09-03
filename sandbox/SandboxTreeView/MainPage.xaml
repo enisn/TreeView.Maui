@@ -12,7 +12,7 @@
 
         <ScrollView>
             <StackLayout>
-                <t:TreeView ItemsSource="{Binding Nodes}">
+                <t:TreeView BackgroundColor="White" ArrowTheme="Dark" ItemsSource="{Binding Nodes}">
                 </t:TreeView>
             </StackLayout>
         </ScrollView>
