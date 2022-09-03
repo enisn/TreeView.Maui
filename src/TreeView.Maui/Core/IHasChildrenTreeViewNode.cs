@@ -1,4 +1,6 @@
-﻿namespace TreeView.Maui.Core;
+﻿using System.Collections.Specialized;
+
+namespace TreeView.Maui.Core;
 
 public interface IHasChildrenTreeViewNode : ITreeViewNode
 {

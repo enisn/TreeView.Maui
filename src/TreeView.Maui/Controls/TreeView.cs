@@ -96,10 +96,14 @@ public class TreeViewNodeView : ContentView
     protected ImageButton extendButton;
     protected StackLayout slChildrens;
     protected IHasChildrenTreeViewNode Node { get; }
+    protected DataTemplate ItemTemplate { get; }
+    protected NodeArrowTheme ArrowTheme { get; }
     public TreeViewNodeView(IHasChildrenTreeViewNode node, DataTemplate itemTemplate, NodeArrowTheme theme)
     {
         var sl = new StackLayout { Spacing = 0 };
         BindingContext = Node = node;
+        ItemTemplate = itemTemplate;
+        ArrowTheme = theme;
         Content = sl;
 
         slChildrens = new StackLayout { IsVisible = node.IsExtended, Margin = new Thickness(10, 0, 0, 0), Spacing = 0 };
@@ -130,7 +134,7 @@ public class TreeViewNodeView : ContentView
                     foreach (var child in lazyNode.GetChildren(lazyNode))
                     {
                         lazyNode.Children.Add(child);
-                        slChildrens.Add(new TreeViewNodeView(child, itemTemplate, theme));
+                        slChildrens.Add(new TreeViewNodeView(child, ItemTemplate, theme));
                     }
 
                     if (!lazyNode.Children.Any())
@@ -146,7 +150,7 @@ public class TreeViewNodeView : ContentView
             }
         };
 
-        var content = itemTemplate.CreateContent() as View;
+        var content = ItemTemplate.CreateContent() as View;
 
         sl.Children.Add(new StackLayout
         {
@@ -158,12 +162,36 @@ public class TreeViewNodeView : ContentView
             }
         });
 
+        if (Node.Children is INotifyCollectionChanged ovservableCollection)
+        {
+            ovservableCollection.CollectionChanged += Children_CollectionChanged;
+        }
+
         foreach (var child in node.Children)
         {
-            slChildrens.Children.Add(new TreeViewNodeView(child, itemTemplate, theme));
+            slChildrens.Children.Add(new TreeViewNodeView(child, ItemTemplate, theme));
         }
 
         sl.Children.Add(slChildrens);
+    }
+
+    private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            foreach (var item in e.NewItems)
+            {
+                slChildrens.Children.Insert(e.NewStartingIndex, new TreeViewNodeView(item as IHasChildrenTreeViewNode, ItemTemplate, ArrowTheme));
+            }
+        }
+
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            foreach (var item in e.OldItems)
+            {
+                slChildrens.Children.Remove(slChildrens.Children.FirstOrDefault(x => (x as View).BindingContext == item));
+            }
+        }
     }
 
     public void UpdateArrowTheme(NodeArrowTheme theme)
