@@ -4,17 +4,9 @@ using TreeView.Maui.Core;
 
 namespace TreeView.Maui.Controls;
 
-public class TreeView : ContentView
+public partial class TreeView : ContentView
 {
     private StackLayout _root = new StackLayout { Spacing = 0 };
-
-    public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable), typeof(TreeView), null, propertyChanging: (b, o, n) => (b as TreeView).OnItemsSourceSetting(o as IEnumerable, n as IEnumerable), propertyChanged: (b,o,v) => (b as TreeView).OnItemsSourceSet() );
-
-    public static readonly BindableProperty ItemTemplateProperty = BindableProperty.Create(nameof(ItemTemplate), typeof(DataTemplate), typeof(TreeView), new DataTemplate(typeof(DefaultTreeViewNodeView)), propertyChanged: (b, o, n) => (b as TreeView).OnItemTemplateChanged());
-
-    public IEnumerable ItemsSource { get => (IEnumerable)GetValue(ItemsSourceProperty); set => SetValue(ItemsSourceProperty, value); }
-
-    public DataTemplate ItemTemplate { get => (DataTemplate)GetValue(ItemTemplateProperty); set => SetValue(ItemTemplateProperty, value); }
 
     public TreeView()
     {
@@ -47,7 +39,7 @@ public class TreeView : ContentView
                 {
                     foreach (var item in e.NewItems)
                     {
-                        _root.Children.Insert(e.NewStartingIndex, new TreeViewNodeView(item as IHasChildrenTreeViewNode, ItemTemplate));
+                        _root.Children.Insert(e.NewStartingIndex, new TreeViewNodeView(item as IHasChildrenTreeViewNode, ItemTemplate, ArrowTheme));
                     }
                 }
                 break;
@@ -85,30 +77,43 @@ public class TreeView : ContentView
         {
             if (item is IHasChildrenTreeViewNode node)
             {
-                _root.Children.Add(new TreeViewNodeView(node, ItemTemplate));
+                _root.Children.Add(new TreeViewNodeView(node, ItemTemplate, ArrowTheme));
             }
+        }
+    }
+
+    protected virtual void OnArrowThemeChanged()
+    {
+        foreach (TreeViewNodeView treeViewNodeView in _root.Children.Where(x => x is TreeViewNodeView))
+        {
+            treeViewNodeView.UpdateArrowTheme(ArrowTheme);
         }
     }
 }
 
 public class TreeViewNodeView : ContentView
 {
-    public TreeViewNodeView(IHasChildrenTreeViewNode node, DataTemplate itemTemplate)
+    protected ImageButton extendButton;
+    protected StackLayout slChildrens;
+    protected IHasChildrenTreeViewNode Node { get; }
+    public TreeViewNodeView(IHasChildrenTreeViewNode node, DataTemplate itemTemplate, NodeArrowTheme theme)
     {
-        var sl = new StackLayout {  Spacing = 0 };
-        BindingContext = node;
+        var sl = new StackLayout { Spacing = 0 };
+        BindingContext = Node = node;
         Content = sl;
 
-        var slChildrens = new StackLayout { IsVisible = node.IsExtended, Margin = new Thickness(10, 0, 0, 0), Spacing = 0 };
+        slChildrens = new StackLayout { IsVisible = node.IsExtended, Margin = new Thickness(10, 0, 0, 0), Spacing = 0 };
 
-        var extendButton = new ImageButton
+        extendButton = new ImageButton
         {
-            Source = Application.Current.RequestedTheme == AppTheme.Dark ? "down_light.png" : "down_dark.png",
+            Source = GetArrowSource(theme),
             VerticalOptions = LayoutOptions.Center,
-            Opacity = node.IsLeaf ? 0 : 1,
+            BackgroundColor = Colors.Transparent,
+            Opacity = node.IsLeaf ? 0 : 1, // Using opacity instead isvisible to keep alignment
             Rotation = node.IsExtended ? 0 : -90,
             HeightRequest = 30,
             WidthRequest = 30,
+            CornerRadius = 15
         };
 
         extendButton.Clicked += (s, e) =>
@@ -125,10 +130,10 @@ public class TreeViewNodeView : ContentView
                     foreach (var child in lazyNode.GetChildren(lazyNode))
                     {
                         lazyNode.Children.Add(child);
-                        slChildrens.Add(new TreeViewNodeView(child, itemTemplate));
+                        slChildrens.Add(new TreeViewNodeView(child, itemTemplate, theme));
                     }
 
-                    if(!lazyNode.Children.Any())
+                    if (!lazyNode.Children.Any())
                     {
                         extendButton.Opacity = 0;
                         lazyNode.IsLeaf = true;
@@ -155,9 +160,43 @@ public class TreeViewNodeView : ContentView
 
         foreach (var child in node.Children)
         {
-            slChildrens.Children.Add(new TreeViewNodeView(child, itemTemplate));
+            slChildrens.Children.Add(new TreeViewNodeView(child, itemTemplate, theme));
         }
 
         sl.Children.Add(slChildrens);
     }
+
+    public void UpdateArrowTheme(NodeArrowTheme theme)
+    {
+        extendButton.Source = GetArrowSource(theme);
+
+        if (slChildrens.Any())
+        {
+            foreach (var child in slChildrens.Children)
+            {
+                if (child is TreeViewNodeView treeViewNodeView)
+                {
+                    treeViewNodeView.UpdateArrowTheme(theme);
+                }
+            }
+        }
+    }
+
+    protected virtual string GetArrowSource(NodeArrowTheme theme)
+    {
+        if (theme == NodeArrowTheme.Default)
+        {
+            return Application.Current.RequestedTheme == AppTheme.Dark ? "down_light.png" : "down_dark.png";
+        }
+        else
+        {
+            return theme == NodeArrowTheme.Light ? "down_light.png" : "down_dark.png";
+        }
+    }
+}
+public enum NodeArrowTheme
+{
+    Default,
+    Light,
+    Dark
 }
