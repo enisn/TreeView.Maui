@@ -218,7 +218,7 @@ public class TreeViewNodeView : ContentView
         }
         else
         {
-            return theme == NodeArrowTheme.Light ? GetImageSource("down_light.png") : GetImageSource("down_dark.png);
+            return theme == NodeArrowTheme.Light ? GetImageSource("down_light.png") : GetImageSource("down_dark.png");
         }
     }
 
