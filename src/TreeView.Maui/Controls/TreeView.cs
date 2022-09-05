@@ -210,16 +210,22 @@ public class TreeViewNodeView : ContentView
         }
     }
 
-    protected virtual string GetArrowSource(NodeArrowTheme theme)
+    protected virtual ImageSource GetArrowSource(NodeArrowTheme theme)
     {
         if (theme == NodeArrowTheme.Default)
         {
-            return Application.Current.RequestedTheme == AppTheme.Dark ? "down_light.png" : "down_dark.png";
+            return GetImageSource(Application.Current.RequestedTheme == AppTheme.Dark ? "down_light.png" : "down_dark.png");
         }
         else
         {
-            return theme == NodeArrowTheme.Light ? "down_light.png" : "down_dark.png";
+            return theme == NodeArrowTheme.Light ? GetImageSource("down_light.png") : GetImageSource("down_dark.png);
         }
+    }
+
+    protected ImageSource GetImageSource(string fileName)
+    {
+        return
+            ImageSource.FromResource("TreeView.Maui.Resources." + fileName, GetType().Assembly);
     }
 }
 public enum NodeArrowTheme
