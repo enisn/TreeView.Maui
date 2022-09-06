@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using TreeView.Maui.Core;
 
 namespace TreeView.Maui.Controls;
@@ -106,6 +107,25 @@ public class TreeViewNodeView : ContentView
         ArrowTheme = theme;
         Content = sl;
 
+        // TODO: Convert it to BindableProperty
+        if (node is INotifyPropertyChanged observable)
+        {
+            observable.PropertyChanged += (s, e) =>
+            {
+                switch (e.PropertyName)
+                {
+                    case nameof(ITreeViewNode.IsExtended):
+                        ToggleTo(Node.IsExtended);
+                        break;
+                    case nameof(IHasChildrenTreeViewNode.IsLeaf):
+                        extendButton.Opacity = Node.IsLeaf ? 0 : 1;
+                        break;
+                    default:
+                        break;
+                }
+            };
+        }
+
         slChildrens = new StackLayout { IsVisible = node.IsExtended, Margin = new Thickness(10, 0, 0, 0), Spacing = 0 };
 
         extendButton = new ImageButton
@@ -122,32 +142,7 @@ public class TreeViewNodeView : ContentView
 
         extendButton.Clicked += (s, e) =>
         {
-            node.IsExtended = !node.IsExtended;
-            slChildrens.IsVisible = node.IsExtended;
-
-            if (node.IsExtended)
-            {
-                extendButton.RotateTo(0);
-
-                if (node is ILazyLoadTreeViewNode lazyNode && lazyNode.GetChildren != null && !lazyNode.Children.Any())
-                {
-                    var lazyChildren = lazyNode.GetChildren(lazyNode);
-                    foreach (var child in lazyChildren)
-                    {
-                        lazyNode.Children.Add(child);
-                    }
-
-                    if (!lazyNode.Children.Any())
-                    {
-                        extendButton.Opacity = 0;
-                        lazyNode.IsLeaf = true;
-                    }
-                }
-            }
-            else
-            {
-                extendButton.RotateTo(-90);
-            }
+            ToggleTo(!node.IsExtended);
         };
 
         var content = ItemTemplate.CreateContent() as View;
@@ -172,6 +167,35 @@ public class TreeViewNodeView : ContentView
         if (Node.Children is INotifyCollectionChanged ovservableCollection)
         {
             ovservableCollection.CollectionChanged += Children_CollectionChanged;
+        }
+    }
+
+    protected virtual void ToggleTo(bool extended)
+    {
+        slChildrens.IsVisible = extended;
+
+        if (extended)
+        {
+            extendButton.RotateTo(0);
+
+            if (Node is ILazyLoadTreeViewNode lazyNode && lazyNode.GetChildren != null && !lazyNode.Children.Any())
+            {
+                var lazyChildren = lazyNode.GetChildren(lazyNode);
+                foreach (var child in lazyChildren)
+                {
+                    lazyNode.Children.Add(child);
+                }
+
+                if (!lazyNode.Children.Any())
+                {
+                    extendButton.Opacity = 0;
+                    lazyNode.IsLeaf = true;
+                }
+            }
+        }
+        else
+        {
+            extendButton.RotateTo(-90);
         }
     }
 
