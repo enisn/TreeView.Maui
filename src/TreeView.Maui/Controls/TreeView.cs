@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Microsoft.Maui.Controls;
+using System.Collections;
 using System.Collections.Specialized;
 using TreeView.Maui.Core;
 
@@ -119,6 +120,40 @@ public class TreeViewNodeView : ContentView
             WidthRequest = 30,
             CornerRadius = 15
         };
+
+        extendButton.Triggers.Add(new DataTrigger(typeof(ImageButton))
+        {
+            Binding = new Binding(nameof(Node.IsLeaf)),
+            Value = true,
+            Setters = { new Setter { Property = ImageButton.OpacityProperty, Value = 0 } }
+        });
+
+        extendButton.Triggers.Add(new DataTrigger(typeof(ImageButton))
+        {
+            Binding = new Binding(nameof(Node.IsLeaf)),
+            Value = false,
+            Setters = { new Setter { Property = ImageButton.OpacityProperty, Value = 1 } }
+        });
+
+        extendButton.Triggers.Add(new DataTrigger(typeof(ImageButton))
+        {
+            Binding = new Binding(nameof(Node.IsExtended)),
+            Value = true,
+            EnterActions =
+            {
+                new GenericTriggerAction<ImageButton>((sender) =>
+                {
+                    sender.RotateTo(0);
+                })
+            },
+            ExitActions =
+            {
+                new GenericTriggerAction<ImageButton>((sender) =>
+                {
+                    sender.RotateTo(-90);
+                })
+            }
+        });
 
         extendButton.Clicked += (s, e) =>
         {
