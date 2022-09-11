@@ -12,6 +12,12 @@
 
         <ScrollView>
             <StackLayout>
+
+                <HorizontalStackLayout>
+                    <Button Text="Randomize Names" Command="{Binding RandomizeNamesCommand}" />
+                    <Button Text="Switch IsLeaf" Command="{Binding SwitchIsLeafCommand}" />
+                </HorizontalStackLayout>
+
                 <t:TreeView ItemsSource="{Binding Nodes}">
                 </t:TreeView>
             </StackLayout>
