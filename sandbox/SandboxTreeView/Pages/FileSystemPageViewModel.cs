@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using TreeView.Maui.Core;
 
-namespace SandboxTreeView;
+namespace SandboxTreeView.Pages;
 public class FileSystemPageViewModel : BindableObject
 {
     private bool isBusy;

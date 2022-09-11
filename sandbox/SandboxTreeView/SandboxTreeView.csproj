@@ -58,16 +58,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="FileSystemCustomTemplatePage.xaml.cs">
+	  <Compile Update="Pages\FileSystemCustomTemplatePage.xaml.cs">
 	    <DependentUpon>FileSystemCustomTemplatePage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="FileSystemCustomTemplatePage.xaml">
+	  <MauiXaml Update="Pages\FileSystemCustomTemplatePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="FileSystemPage.xaml">
+	  <MauiXaml Update="Pages\FileSystemPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\SelectionPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

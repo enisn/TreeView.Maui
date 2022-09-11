@@ -1,6 +1,6 @@
-﻿using Microsoft.Maui.Controls;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Specialized;
+using System.ComponentModel.Design;
 using TreeView.Maui.Core;
 
 namespace TreeView.Maui.Controls;
@@ -40,7 +40,11 @@ public partial class TreeView : ContentView
                 {
                     foreach (var item in e.NewItems)
                     {
-                        _root.Children.Insert(e.NewStartingIndex, new TreeViewNodeView(item as IHasChildrenTreeViewNode, ItemTemplate, ArrowTheme));
+                        var nodeView = new TreeViewNodeView(item as IHasChildrenTreeViewNode, ItemTemplate, ArrowTheme);
+                        nodeView.SetBinding(TreeViewNodeView.SelectionColorProperty,
+                            new Binding(nameof(TreeView.SelectionColor), source: this));
+
+                        _root.Children.Insert(e.NewStartingIndex, nodeView);
                     }
                 }
                 break;
@@ -78,7 +82,11 @@ public partial class TreeView : ContentView
         {
             if (item is IHasChildrenTreeViewNode node)
             {
-                _root.Children.Add(new TreeViewNodeView(node, ItemTemplate, ArrowTheme));
+                var nodeView = new TreeViewNodeView(node, ItemTemplate, ArrowTheme);
+                nodeView.SetBinding(TreeViewNodeView.SelectionColorProperty,
+                    new Binding(nameof(TreeView.SelectionColor), source: this));
+                _root.Children.Add(nodeView);
+
             }
         }
     }
@@ -99,6 +107,10 @@ public class TreeViewNodeView : ContentView
     protected IHasChildrenTreeViewNode Node { get; }
     protected DataTemplate ItemTemplate { get; }
     protected NodeArrowTheme ArrowTheme { get; }
+    public Color SelectionColor { get => (Color)GetValue(SelectionColorProperty); set => SetValue(SelectionColorProperty, value); }
+
+    public static readonly BindableProperty SelectionColorProperty =
+        BindableProperty.Create(nameof(SelectionColor), typeof(Color), typeof(TreeViewNodeView), defaultValue: Colors.Purple);
     public TreeViewNodeView(IHasChildrenTreeViewNode node, DataTemplate itemTemplate, NodeArrowTheme theme)
     {
         var sl = new StackLayout { Spacing = 0 };
@@ -162,8 +174,6 @@ public class TreeViewNodeView : ContentView
 
             if (node.IsExtended)
             {
-                extendButton.RotateTo(0);
-
                 if (node is ILazyLoadTreeViewNode lazyNode && lazyNode.GetChildren != null && !lazyNode.Children.Any())
                 {
                     var lazyChildren = lazyNode.GetChildren(lazyNode);
@@ -179,15 +189,11 @@ public class TreeViewNodeView : ContentView
                     }
                 }
             }
-            else
-            {
-                extendButton.RotateTo(-90);
-            }
         };
 
         var content = ItemTemplate.CreateContent() as View;
 
-        sl.Children.Add(new StackLayout
+        var nodeLine = new StackLayout
         {
             Orientation = StackOrientation.Horizontal,
             Children =
@@ -195,11 +201,18 @@ public class TreeViewNodeView : ContentView
                 extendButton,
                 content
             }
-        });
+        };
+
+        AddSelectionTriggers(nodeLine);
+
+        sl.Children.Add(nodeLine);
 
         foreach (var child in node.Children)
         {
-            slChildrens.Children.Add(new TreeViewNodeView(child, ItemTemplate, theme));
+            var nodeView = new TreeViewNodeView(child, ItemTemplate, theme);
+            nodeView.SetBinding(TreeViewNodeView.SelectionColorProperty,
+                    new Binding(nameof(TreeView.SelectionColor), source: this));
+            slChildrens.Children.Add(nodeView);
         }
 
         sl.Children.Add(slChildrens);
@@ -210,13 +223,61 @@ public class TreeViewNodeView : ContentView
         }
     }
 
+    private void AddSelectionTriggers(View nodeLine)
+    {
+        nodeLine.Triggers.Add(new DataTrigger(typeof(View))
+        {
+            Binding = new Binding("Selection"),
+            Value = SelectionState.Selected,
+            Setters =
+            {
+                new Setter
+                {
+                    Property = View.BackgroundColorProperty,
+                    Value = SelectionColor.WithAlpha(.6f)
+                }
+            }
+        });
+
+        nodeLine.Triggers.Add(new DataTrigger(typeof(View))
+        {
+            Binding = new Binding("Selection"),
+            Value = SelectionState.PartiallySelected,
+            Setters =
+            {
+                new Setter
+                {
+                    Property = View.BackgroundColorProperty,
+                    Value = SelectionColor.WithAlpha(.4f)
+                }
+            }
+        });
+
+        nodeLine.Triggers.Add(new DataTrigger(typeof(View))
+        {
+            Binding = new Binding("Selection"),
+            Value = SelectionState.Unselected,
+            Setters =
+            {
+                new Setter
+                {
+                    Property = View.BackgroundColorProperty,
+                    Value = Colors.Transparent
+                }
+            }
+        });
+    }
+
     private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
             foreach (var item in e.NewItems)
             {
-                slChildrens.Children.Insert(e.NewStartingIndex, new TreeViewNodeView(item as IHasChildrenTreeViewNode, ItemTemplate, ArrowTheme));
+                var nodeView = new TreeViewNodeView(item as IHasChildrenTreeViewNode, ItemTemplate, ArrowTheme);
+                nodeView.SetBinding(TreeViewNodeView.SelectionColorProperty,
+                    new Binding(nameof(TreeView.SelectionColor), source: this));
+                slChildrens.Children.Insert(e.NewStartingIndex, nodeView);
             }
         }
 

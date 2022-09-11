@@ -6,3 +6,15 @@ public interface ITreeViewNode
     object Value { get; set; }
     bool IsExtended { get; set; }
 }
+
+public interface ISelectableNode : IHasChildrenTreeViewNode
+{
+    SelectionState Selection { get; set; }
+}
+
+public enum SelectionState
+{
+    Unselected,
+    Selected,
+    PartiallySelected
+}

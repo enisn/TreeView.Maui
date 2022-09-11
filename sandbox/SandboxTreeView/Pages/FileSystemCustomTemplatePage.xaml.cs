@@ -1,4 +1,4 @@
-namespace SandboxTreeView;
+namespace SandboxTreeView.Pages;
 
 public partial class FileSystemCustomTemplatePage : ContentPage
 {
