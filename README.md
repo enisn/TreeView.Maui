@@ -152,5 +152,6 @@
 - [ ] Selection
   - [ ] Single Selection
   - [ ] Multiple Selection
-- [ ] Include it in [InputKit](https://github.com/enisn/Xamarin.Forms.InputKit)
+- [ ] ~~Include it in [InputKit](https://github.com/enisn/Xamarin.Forms.InputKit)~~
+- [ ] Include it in [UraniumUI](https://github.com/enisn/UraniumUI/pull/43)
 
