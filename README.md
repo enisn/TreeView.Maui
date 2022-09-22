@@ -1,5 +1,7 @@
 # TreeView.Maui
- A simple treeview control for MAUI
+ A simple treeview control for MAUI.
+ 
+ > **⚠️WARNING**: This project is a PoC and main TreeView implementation is in [UraniumUI](https://github.com/enisn/UraniumUI). This project wont be maintained anymore.
 
 ## Showcase
 
