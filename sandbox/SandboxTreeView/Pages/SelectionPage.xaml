@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage x:Class="SandboxTreeView.Pages.SelectionPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:t="clr-namespace:TreeView.Maui.Controls;assembly=TreeView.Maui"
+             xmlns:root="clr-namespace:SandboxTreeView"
+             xmlns:local="clr-namespace:SandboxTreeView.Pages">
+    <ContentPage.BindingContext>
+        <root:MainPageViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <StackLayout>
+            <t:TreeView ItemsSource="{Binding Nodes}" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

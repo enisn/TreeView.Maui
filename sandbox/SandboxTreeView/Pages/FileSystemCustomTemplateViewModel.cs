@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using TreeView.Maui.Core;
 
-namespace SandboxTreeView;
+namespace SandboxTreeView.Pages;
 public class FileSystemCustomTemplatePageViewModel : BindableObject
 {
     private bool isBusy;

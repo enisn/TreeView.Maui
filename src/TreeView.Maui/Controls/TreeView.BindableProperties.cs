@@ -19,4 +19,10 @@ public partial class TreeView
     public static readonly BindableProperty ArrowThemeProperty =
         BindableProperty.Create(nameof(ArrowTheme), typeof(NodeArrowTheme), typeof(TreeView), defaultValue: NodeArrowTheme.Default,
             propertyChanged: (bo, ov, nv) => (bo as TreeView).OnArrowThemeChanged());
+
+    public Color SelectionColor { get => (Color)GetValue(SelectionColorProperty); set => SetValue(SelectionColorProperty, value); }
+
+    public static readonly BindableProperty SelectionColorProperty =
+        BindableProperty.Create(nameof(SelectionColor), typeof(Color), typeof(TreeView), defaultValue: Color.FromArgb("#512BD4"),
+            propertyChanged: (bo, ov, nv) => (bo as TreeView).OnPropertyChanged(nameof(SelectionColor)));
 }

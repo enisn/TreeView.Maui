@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SandboxTreeView"
+    xmlns:pages="clr-namespace:SandboxTreeView.Pages"
     Shell.FlyoutBehavior="Disabled">
 
     <TabBar>
@@ -16,12 +17,17 @@
         </Tab>
         <Tab Title="FileSystem">
             <ShellContent Title="FileSystem"
-                      ContentTemplate="{DataTemplate local:FileSystemPage}"
+                      ContentTemplate="{DataTemplate pages:FileSystemPage}"
                       Route="FileSystem"/>
         </Tab>
         <Tab Title="FileSystem (Custom)">
             <ShellContent Title="Custom Template"
-                      ContentTemplate="{DataTemplate local:FileSystemCustomTemplatePage}"
+                      ContentTemplate="{DataTemplate pages:FileSystemCustomTemplatePage}"
+                      Route="Custom"/>
+        </Tab>
+        <Tab Title="Selection">
+            <ShellContent Title="Custom Template"
+                      ContentTemplate="{DataTemplate pages:SelectionPage}"
                       Route="Custom"/>
         </Tab>
     </TabBar>
